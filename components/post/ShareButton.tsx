@@ -41,16 +41,16 @@ export function ShareButton({ postId }: ShareButtonProps) {
     return (
         <button
             onClick={handleShare}
-            className="flex items-center gap-2 text-text-secondary hover:text-accent transition-colors"
+            className="flex items-center gap-2 text-text-secondary hover:text-accent transition-all p-2 rounded-lg hover:bg-white/5 group/share"
             title="Compartilhar"
         >
             {copied ? (
                 <>
-                    <Check size={20} />
-                    <span className="text-xs">Copiado!</span>
+                    <Check size={18} className="text-success" />
+                    <span className="text-[10px] font-bold uppercase tracking-tight text-success">Copiado!</span>
                 </>
             ) : (
-                <Share2 size={20} />
+                <Share2 size={18} className="group-hover/share:scale-110 transition-transform" />
             )}
         </button>
     )

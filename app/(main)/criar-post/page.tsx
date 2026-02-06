@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import type { z } from 'zod'
+import { motion } from 'framer-motion'
 
 type PostFormData = z.infer<typeof postSchema>
 
@@ -90,132 +91,169 @@ export default function CreatePostPage() {
   }
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" onClick={() => router.back()}>
-            ← Voltar
-          </Button>
-          <h1 className="text-2xl font-bold">Criar Post</h1>
+    <div className="min-h-screen p-4 sm:p-8 bg-background/50">
+      <div className="max-w-2xl mx-auto space-y-8">
+        <div className="flex items-center gap-6">
+          <button
+            onClick={() => router.back()}
+            className="p-2 hover:bg-white/5 rounded-full transition-all active:scale-90 text-text-secondary hover:text-white"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+          </button>
+          <h1 className="text-3xl font-black text-white tracking-tight">Criar Sussurro</h1>
         </div>
 
-        {/* Warning */}
-        <Card className="mb-6 bg-warning/10 border-warning">
-          <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-            ⚠️ ATENÇÃO: NÃO INCLUA
+        {/* Warning Card - Redesigned */}
+        <div className="relative overflow-hidden p-6 rounded-3xl bg-amber-500/10 border border-amber-500/20 shadow-2xl">
+          <div className="absolute top-0 right-0 p-4 opacity-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+          </div>
+
+          <h3 className="font-black text-lg text-amber-400 mb-4 flex items-center gap-2 uppercase tracking-wider">
+            🚨 Anonimato é Sagrado
           </h3>
-          <ul className="space-y-1 text-sm mb-4">
-            <li>• Nomes reais de pessoas</li>
-            <li>• Nomes de empresas/lugares específicos</li>
-            <li>• Números de telefone, emails ou redes sociais</li>
-            <li>• Endereços</li>
-            <li>• Qualquer dado que identifique você ou outros</li>
-          </ul>
-          <p className="text-sm font-semibold mb-3">
-            ⚖️ Violações = Ban permanente
+
+          <div className="grid sm:grid-cols-2 gap-6 text-sm">
+            <div className="space-y-2">
+              <p className="font-bold text-red-400 uppercase text-[10px] tracking-widest">Nunca poste:</p>
+              <ul className="space-y-1 text-text-secondary font-medium">
+                <li>• Nomes reais ou Redes Sociais</li>
+                <li>• Empresas ou Endereços exatos</li>
+                <li>• Telefones ou E-mails</li>
+              </ul>
+            </div>
+            <div className="space-y-2 border-l border-white/5 pl-6">
+              <p className="font-bold text-green-400 uppercase text-[10px] tracking-widest">Pode postar:</p>
+              <ul className="space-y-1 text-text-secondary font-medium">
+                <li>• "Meu ex", "Um colega"</li>
+                <li>• "Num hospital", "Dessa vez..."</li>
+                <li>• Referências genéricas</li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="mt-6 text-xs font-black text-amber-500/60 uppercase tracking-widest flex items-center gap-2">
+            ⚖️ Doxxing é motivo de ban imediato e permanente.
           </p>
-          <h4 className="font-bold text-success mb-2">✅ PODE INCLUIR:</h4>
-          <ul className="space-y-1 text-sm">
-            <li>• "Meu chefe", "Minha ex", "Um amigo"</li>
-            <li>• "Na empresa onde trabalho"</li>
-            <li>• Cidade grande (ex: "Em Maputo")</li>
-          </ul>
-        </Card>
+        </div>
 
         {error && (
-          <div className="bg-error/10 border border-error text-error px-4 py-3 rounded-lg mb-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-error/10 border border-error/20 text-error px-6 py-4 rounded-2xl font-bold flex items-center gap-3 shadow-xl"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
             {error}
-          </div>
+          </motion.div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 pb-32">
           {/* Category */}
-          <div>
-            <label className="text-sm font-medium text-text-primary mb-2 block">
-              Categoria *
+          <div className="space-y-3">
+            <label className="text-xs font-black uppercase tracking-widest text-text-secondary ml-1">
+              Categoria
             </label>
-            <select
-              className="w-full px-4 py-2 bg-surface border border-border rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
-              {...register('category')}
-            >
-              <option value="">Selecione uma categoria</option>
-              {POST_CATEGORIES.map((cat) => (
-                <option key={cat.value} value={cat.value}>
-                  {cat.emoji} {cat.label}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                className="w-full h-14 px-6 bg-white/5 border border-white/10 rounded-2xl text-text-primary focus:outline-none focus:ring-2 focus:ring-accent appearance-none font-bold transition-all hover:bg-white/10"
+                {...register('category')}
+              >
+                <option value="" className="bg-neutral-900">Selecione uma categoria...</option>
+                {POST_CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value} className="bg-neutral-900">
+                    {cat.emoji} {cat.label}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+              </div>
+            </div>
             {errors.category && (
-              <span className="text-sm text-error">{errors.category.message}</span>
+              <span className="text-sm font-bold text-error ml-1">{errors.category.message}</span>
             )}
           </div>
 
           {/* Title */}
-          <div>
-            <label className="text-sm font-medium text-text-primary mb-2 block">
-              Título *
+          <div className="space-y-3">
+            <label className="text-xs font-black uppercase tracking-widest text-text-secondary ml-1">
+              Título da História
             </label>
             <Input
-              placeholder="Dê um título para sua história..."
+              placeholder="Dê um título impactante..."
+              className="h-14 px-6 !rounded-2xl bg-white/5 border-white/10 font-bold placeholder:text-text-secondary/50"
               {...register('title')}
             />
             {errors.title && (
-              <span className="text-sm text-error">{errors.title.message}</span>
+              <span className="text-sm font-bold text-error ml-1">{errors.title.message}</span>
             )}
           </div>
 
           {/* Content */}
-          <div>
-            <label className="text-sm font-medium text-text-primary mb-2 block">
-              Conteúdo *
-            </label>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center ml-1">
+              <label className="text-xs font-black uppercase tracking-widest text-text-secondary">
+                O Desabafo
+              </label>
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                {watch('content')?.length || 0} / 5000
+              </span>
+            </div>
             <textarea
-              className="w-full px-4 py-2 bg-surface border border-border rounded-lg text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-accent min-h-[200px]"
-              placeholder="Conte sua história..."
+              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-3xl text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-accent min-h-[250px] font-medium leading-relaxed transition-all hover:bg-white/10"
+              placeholder="Sussurre aqui o que ninguém mais pode saber..."
               {...register('content')}
             />
             {errors.content && (
-              <span className="text-sm text-error">{errors.content.message}</span>
+              <span className="text-sm font-bold text-error ml-1">{errors.content.message}</span>
             )}
-            <p className="text-xs text-text-secondary mt-1">
-              {watch('content')?.length || 0} / 5000 caracteres
-            </p>
           </div>
 
-          {/* Sensitive content */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="sensitive"
-              className="w-4 h-4 rounded border-border bg-surface text-accent focus:ring-2 focus:ring-accent"
-              {...register('is_sensitive')}
-            />
-            <label htmlFor="sensitive" className="text-sm text-text-primary">
-              Marcar como conteúdo sensível
-            </label>
-          </div>
+          {/* Switches (Sensível, Aceite) */}
+          <div className="grid gap-4 bg-white/5 p-6 rounded-3xl border border-white/5">
+            <div className="flex items-center justify-between group cursor-pointer">
+              <label htmlFor="sensitive" className="flex-1 cursor-pointer">
+                <p className="font-bold text-white group-hover:text-accent transition-colors">Conteúdo Sensível (NSFW)</p>
+                <p className="text-xs text-text-secondary">Avisar outros usuários sobre temas pesados.</p>
+              </label>
+              <input
+                type="checkbox"
+                id="sensitive"
+                className="w-6 h-6 rounded-lg border-white/10 bg-white/5 text-accent focus:ring-transparent checked:bg-accent ring-0"
+                {...register('is_sensitive')}
+              />
+            </div>
 
-          {/* Accept rules */}
-          <div className="flex items-start gap-2">
-            <input
-              type="checkbox"
-              id="accept"
-              checked={acceptedWarning}
-              onChange={(e) => setAcceptedWarning(e.target.checked)}
-              className="w-4 h-4 mt-0.5 rounded border-border bg-surface text-accent focus:ring-2 focus:ring-accent"
-            />
-            <label htmlFor="accept" className="text-sm text-text-primary">
-              Li e aceito as regras. Entendo que a violação pode resultar em ban
-              permanente.
-            </label>
+            <div className="h-px bg-white/5" />
+
+            <div className="flex items-center justify-between group cursor-pointer">
+              <label htmlFor="accept" className="flex-1 cursor-pointer">
+                <p className="font-bold text-white group-hover:text-accent transition-colors">Regras do Sussurro</p>
+                <p className="text-xs text-text-secondary">Prometo manter o anonimato de todos.</p>
+              </label>
+              <input
+                type="checkbox"
+                id="accept"
+                checked={acceptedWarning}
+                onChange={(e) => setAcceptedWarning(e.target.checked)}
+                className="w-6 h-6 rounded-lg border-white/10 bg-white/5 text-accent focus:ring-transparent checked:bg-accent ring-0"
+              />
+            </div>
           </div>
 
           <Button
             type="submit"
-            className="w-full"
+            size="lg"
+            className="w-full h-16 !rounded-2xl text-lg font-black uppercase tracking-[0.2em] shadow-2xl shadow-accent/40"
             disabled={loading || !acceptedWarning}
           >
-            {loading ? 'Publicando...' : 'Publicar'}
+            {loading ? (
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                Sussurrando...
+              </div>
+            ) : 'Publicar Sussurro 👻'}
           </Button>
         </form>
       </div>

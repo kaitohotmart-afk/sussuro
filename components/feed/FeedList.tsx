@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { fetchPosts } from '@/lib/actions/posts'
 import { PostCard } from '@/components/post/PostCard'
@@ -56,10 +57,12 @@ export function FeedList({ initialPosts, userId }: FeedListProps) {
     }, [inView, hasMore])
 
     return (
-        <div className="space-y-4">
-            {posts.map((post) => (
-                <PostCard key={post.id} post={post} userId={userId} />
-            ))}
+        <div className="space-y-6 pb-20">
+            <AnimatePresence mode="popLayout">
+                {posts.map((post, index) => (
+                    <PostCard key={post.id} post={post} userId={userId} />
+                ))}
+            </AnimatePresence>
 
             {hasMore ? (
                 <div ref={ref} className="flex justify-center py-4">

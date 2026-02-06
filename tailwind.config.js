@@ -8,17 +8,17 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                background: '#0a0a0a',
-                surface: '#1a1a1a',
-                'surface-hover': '#2a2a2a',
-                border: '#333333',
-                'text-primary': '#ffffff',
-                'text-secondary': '#a0a0a0',
-                accent: '#8b5cf6',
-                'accent-hover': '#7c3aed',
-                success: '#10b981',
-                error: '#ef4444',
-                warning: '#f59e0b',
+                background: 'var(--background)',
+                surface: 'var(--surface)',
+                'surface-hover': 'var(--surface-hover)',
+                border: 'var(--border)',
+                'text-primary': 'var(--text-primary)',
+                'text-secondary': 'var(--text-secondary)',
+                accent: 'var(--accent)',
+                'accent-hover': 'var(--accent-hover)',
+                success: 'var(--success)',
+                error: 'var(--error)',
+                warning: 'var(--warning)',
             },
             fontSize: {
                 xs: '0.75rem',

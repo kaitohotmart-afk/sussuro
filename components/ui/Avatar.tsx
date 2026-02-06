@@ -20,12 +20,13 @@ export function Avatar({ type, value, size = 'md', className }: AvatarProps) {
     return (
         <div
             className={cn(
-                'flex items-center justify-center rounded-full bg-surface border-2 border-border',
+                'flex items-center justify-center rounded-full bg-surface border border-white/5 shadow-inner transition-all duration-300',
+                'ring-2 ring-white/5 ring-offset-2 ring-offset-background',
                 sizes[size],
                 className
             )}
         >
-            {type === 'icon' && <span>{value}</span>}
+            {type === 'icon' && <span className="drop-shadow-sm select-none">{value}</span>}
         </div>
     )
 }

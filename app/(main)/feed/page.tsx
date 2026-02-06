@@ -18,33 +18,36 @@ export default async function FeedPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Simple header */}
-      <header className="sticky top-0 z-10 bg-surface border-b border-border px-4 py-3">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold border-b-2 border-accent pb-1">Recentes</h1>
-            <Link href="/explorar" className="text-xl font-bold text-text-secondary hover:text-text-primary transition-colors">
+      {/* Feed content is centered and well-spaced */}
+      <main className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-6">
+            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-text-secondary">
+              Recentes
+            </h1>
+            <Link
+              href="/explorar"
+              className="text-lg font-medium text-text-secondary hover:text-accent transition-all hover:scale-105"
+            >
               🔥 Explorar
             </Link>
           </div>
-          <div className="flex gap-2">
-            <Link href="/criar-post" className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-hover">
-              Criar Post
-            </Link>
-          </div>
+          <Link
+            href="/criar-post"
+            className="px-6 py-2.5 bg-accent text-white rounded-xl font-bold hover:bg-accent-hover transition-all hover:scale-105 active:scale-95 shadow-lg shadow-accent/20"
+          >
+            Criar Post
+          </Link>
         </div>
-      </header>
-
-      {/* Feed */}
-      <main className="max-w-2xl mx-auto p-4 space-y-4">
-        <h2 className="text-xl font-semibold mb-4">Recentes</h2>
 
         {initialPosts && initialPosts.length > 0 ? (
           <FeedList initialPosts={initialPosts} userId={user.id} />
         ) : (
-          <p className="text-center text-text-secondary py-8">
-            Nenhum post ainda. Seja o primeiro a postar!
-          </p>
+          <div className="flex flex-col items-center justify-center py-20 bg-surface/30 border border-border/50 rounded-2xl border-dashed">
+            <p className="text-text-secondary text-lg">
+              Nenhum post ainda. Seja o primeiro a postar! 👻
+            </p>
+          </div>
         )}
       </main>
     </div>

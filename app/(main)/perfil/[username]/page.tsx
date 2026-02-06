@@ -69,83 +69,104 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     }
 
     return (
-        <main className="min-h-screen pb-20">
+        <main className="min-h-screen pb-20 bg-background/50">
             {/* Header / Cover */}
-            <div className="bg-gradient-to-r from-accent/20 to-purple-900/20 h-32 md:h-48 relative">
-                <div className="absolute -bottom-12 left-4 md:left-8 flex items-end">
-                    <div className="p-1 bg-background rounded-full">
+            <div className="relative h-48 md:h-64 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/30 via-purple-900/40 to-black z-0" />
+                <div className="absolute inset-0 backdrop-blur-[2px] z-[1]" />
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent z-[2]" />
+
+                <div className="max-w-4xl mx-auto px-4 h-full relative z-[3] flex items-end pb-8">
+                    <div className="relative group/avatar">
                         <Avatar
                             type={profile.avatar_type}
                             value={profile.avatar_value}
                             size="xl"
+                            className="w-24 h-24 md:w-32 md:h-32 border-4 border-background shadow-2xl ring-4 ring-accent/10 group-hover/avatar:ring-accent/30 transition-all"
                         />
+                        <div className="absolute -bottom-1 -right-1 w-6 h-6 md:w-8 md:h-8 bg-green-500 border-4 border-background rounded-full shadow-lg" />
                     </div>
                 </div>
             </div>
 
-            <div className="px-4 md:px-8 pt-14 md:pt-16 pb-8">
-                <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
-                    <div>
-                        <h1 className="text-2xl font-bold">{profile.username}</h1>
-                        <p className="text-text-secondary mt-1 max-w-lg">
-                            {profile.bio || "Sem biografia."}
-                        </p>
+            <div className="max-w-4xl mx-auto px-4 pt-4">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-10">
+                    <div className="space-y-4 max-w-2xl">
+                        <div>
+                            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-2">
+                                {profile.username}
+                            </h1>
+                            <p className="text-lg text-text-secondary leading-relaxed">
+                                {profile.bio || "Este sussurrador prefere o mistério."}
+                            </p>
+                        </div>
+
+                        {/* Stats - Redesigned as Chips */}
+                        <div className="flex flex-wrap gap-3">
+                            <div className="px-4 py-2 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-2 group hover:bg-white/10 transition-colors">
+                                <Users size={16} className="text-accent" />
+                                <span className="text-sm font-bold text-text-primary">{profile.follower_count}</span>
+                                <span className="text-xs text-text-secondary font-medium">Seguidores</span>
+                            </div>
+                            <div className="px-4 py-2 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-2 group hover:bg-white/10 transition-colors">
+                                <Users size={16} className="text-text-secondary" />
+                                <span className="text-sm font-bold text-text-primary">{profile.following_count}</span>
+                                <span className="text-xs text-text-secondary font-medium">Seguindo</span>
+                            </div>
+                            <div className="px-4 py-2 bg-white/5 border border-white/5 rounded-2xl flex items-center gap-2 group hover:bg-white/10 transition-colors">
+                                <MessageSquare size={16} className="text-text-secondary" />
+                                <span className="text-sm font-bold text-text-primary">{profile.total_posts}</span>
+                                <span className="text-xs text-text-secondary font-medium">Posts</span>
+                            </div>
+                        </div>
                     </div>
 
-                    {currentUser && currentUser.id !== profile.id && (
-                        <FollowButton
-                            targetUserId={profile.id}
-                            initialIsFollowing={isFollowing}
-                        />
-                    )}
-
-                    {currentUser && currentUser.id === profile.id && (
-                        <Link
-                            href="/perfil/editar"
-                            className="px-4 py-2 bg-surface hover:bg-surface-hover border border-border rounded-lg text-sm font-medium transition-colors"
-                        >
-                            Editar Perfil
-                        </Link>
-                    )}
-                </div>
-
-                {/* Stats */}
-                <div className="flex gap-6 mb-8 border-y border-border py-4">
-                    <div className="flex items-center gap-2">
-                        <Users size={20} className="text-accent" />
-                        <span className="font-bold">{profile.follower_count}</span>
-                        <span className="text-text-secondary text-sm">Seguidores</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Users size={20} className="text-text-secondary" />
-                        <span className="font-bold">{profile.following_count}</span>
-                        <span className="text-text-secondary text-sm">Seguindo</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <MessageSquare size={20} className="text-text-secondary" />
-                        <span className="font-bold">{profile.total_posts}</span>
-                        <span className="text-text-secondary text-sm">Posts</span>
-                    </div>
-                </div>
-
-                {/* Content Tabs (Simplified) */}
-                <h2 className="text-xl font-bold mb-4">Publicações</h2>
-
-                {postsWithStatus.length > 0 ? (
-                    <div className="grid gap-4">
-                        {postsWithStatus.map((post: any) => (
-                            <PostCard
-                                key={post.id}
-                                post={post}
-                                userId={currentUser?.id || ''}
+                    <div className="flex gap-3 shrink-0">
+                        {currentUser && currentUser.id !== profile.id && (
+                            <FollowButton
+                                targetUserId={profile.id}
+                                initialIsFollowing={isFollowing}
                             />
-                        ))}
+                        )}
+
+                        {currentUser && currentUser.id === profile.id && (
+                            <Link
+                                href="/perfil/editar"
+                                className="px-6 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold text-white transition-all active:scale-95 flex items-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
+                                Editar Perfil
+                            </Link>
+                        )}
                     </div>
-                ) : (
-                    <div className="text-center py-12 bg-surface/30 rounded-lg text-text-secondary">
-                        <p>Nenhuma publicação ainda.</p>
+                </div>
+
+                {/* Content Tabs */}
+                <div className="space-y-8">
+                    <div className="flex items-center gap-4">
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                        <h2 className="text-sm font-black uppercase tracking-[0.2em] text-text-secondary">
+                            Publicações
+                        </h2>
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                     </div>
-                )}
+
+                    {postsWithStatus.length > 0 ? (
+                        <div className="grid gap-6 max-w-2xl mx-auto">
+                            {postsWithStatus.map((post: any) => (
+                                <PostCard
+                                    key={post.id}
+                                    post={post}
+                                    userId={currentUser?.id || ''}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-20 bg-surface/20 border border-white/5 border-dashed rounded-3xl max-w-2xl mx-auto">
+                            <p className="text-text-secondary text-lg">Sem sussurros por aqui ainda... 🤫</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </main>
     )

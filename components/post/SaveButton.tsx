@@ -38,11 +38,17 @@ export function SaveButton({ postId, initialIsSaved = false }: SaveButtonProps) 
             onClick={handleSave}
             title={isSaved ? "Remover dos favoritos" : "Salvar post"}
             className={cn(
-                "flex items-center gap-1 p-2 rounded-full transition-colors hover:bg-surface-hover",
-                isSaved ? "text-accent" : "text-text-secondary hover:text-accent"
+                "flex items-center gap-1 p-2 rounded-lg transition-all group/save active:scale-95",
+                isSaved ? "text-accent bg-accent/10" : "text-text-secondary hover:text-accent hover:bg-white/5"
             )}
         >
-            <Bookmark size={20} className={isSaved ? "fill-current" : ""} />
+            <Bookmark
+                size={18}
+                className={cn(
+                    "transition-all duration-300",
+                    isSaved ? "fill-current scale-110" : "group-hover/save:scale-110"
+                )}
+            />
         </button>
     )
 }
