@@ -99,13 +99,13 @@ export default function RegisterPage() {
 
     console.log('Attempting to create profile for:', { tempUserId, tempEmail, tempUsername })
 
-    const { error } = await supabase.from('users').insert({
+    const { error } = await (supabase.from('users').insert({
       id: tempUserId,
       email: tempEmail,
       username: tempUsername,
       avatar_type: 'icon',
       avatar_value: selectedAvatar,
-    })
+    } as any) as any)
 
     if (error) {
       console.error('Profile creation error:', error)

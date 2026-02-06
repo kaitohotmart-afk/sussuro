@@ -4,6 +4,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { PostCard } from '@/components/post/PostCard'
 import { FollowButton } from '@/components/profile/FollowButton'
 import { MessageSquare, Heart, Users } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata = {
     title: 'Perfil | Sussurro',
@@ -96,6 +97,15 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                             targetUserId={profile.id}
                             initialIsFollowing={isFollowing}
                         />
+                    )}
+
+                    {currentUser && currentUser.id === profile.id && (
+                        <Link
+                            href="/perfil/editar"
+                            className="px-4 py-2 bg-surface hover:bg-surface-hover border border-border rounded-lg text-sm font-medium transition-colors"
+                        >
+                            Editar Perfil
+                        </Link>
                     )}
                 </div>
 

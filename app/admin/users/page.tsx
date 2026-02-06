@@ -32,13 +32,13 @@ export default function AdminUsersPage() {
 
     const toggleBan = async (userId: string, currentStatus: boolean) => {
         // Toggle ban status
-        const { error } = await supabase
-            .from('users')
+        const { error } = await ((supabase
+            .from('users') as any)
             .update({
                 is_banned: !currentStatus,
                 ban_reason: !currentStatus ? 'Banido por Admin via Dashboard' : null
-            })
-            .eq('id', userId)
+            } as any)
+            .eq('id', userId) as any)
 
         if (!error) {
             setUsers(users.map(u => u.id === userId ? { ...u, is_banned: !currentStatus } : u))

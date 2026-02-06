@@ -59,8 +59,8 @@ export function NotificationItem({ notification, onRead }: NotificationItemProps
             {notification.users ? (
                 <div className="relative">
                     <Avatar
-                        type={notification.users.avatar_type}
-                        value={notification.users.avatar_value}
+                        type={(notification.users as any).avatar_type}
+                        value={(notification.users as any).avatar_value}
                         size="md"
                     />
                     {/* Tiny Icon Badge */}

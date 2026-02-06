@@ -38,11 +38,11 @@ export function CommentForm({ postId, userId, onCommentAdded }: CommentFormProps
         setError('')
 
         // Check comment cooldown
-        const { data: userData } = await supabase
+        const { data: userData } = await (supabase
             .from('users')
             .select('last_comment_at')
             .eq('id', userId)
-            .single()
+            .single() as any)
 
         if (userData?.last_comment_at) {
             const lastCommentTime = new Date(userData.last_comment_at).getTime()
@@ -72,11 +72,11 @@ export function CommentForm({ postId, userId, onCommentAdded }: CommentFormProps
             }
         }
 
-        const { error: commentError } = await supabase.from('comments').insert({
+        const { error: commentError } = await (supabase.from('comments').insert({
             post_id: postId,
             user_id: userId,
             content: data.content,
-        })
+        } as any) as any)
 
         if (commentError) {
             setError('Erro ao criar comentário')

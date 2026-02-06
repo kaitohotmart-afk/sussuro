@@ -26,7 +26,7 @@ export async function fetchPosts(page: number = 1) {
 
     if (!posts) return { data: [], nextCursor: null }
 
-    const postsWithLikes = posts.map(post => {
+    const postsWithLikes = posts.map((post: any) => {
         const userLike = post.likes?.find((like: any) => like.user_id === user.id)
         return {
             ...post,

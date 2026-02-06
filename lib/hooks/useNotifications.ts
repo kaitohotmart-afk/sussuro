@@ -60,10 +60,10 @@ export function useNotifications() {
             ))
             setUnreadCount(prev => Math.max(0, prev - 1))
 
-            await supabase
-                .from('notifications')
-                .update({ is_read: true })
-                .eq('id', id)
+            await ((supabase
+                .from('notifications') as any)
+                .update({ is_read: true } as any)
+                .eq('id', id) as any)
 
             router.refresh()
         } catch (error) {
@@ -79,11 +79,11 @@ export function useNotifications() {
             setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
             setUnreadCount(0)
 
-            await supabase
-                .from('notifications')
-                .update({ is_read: true })
+            await ((supabase
+                .from('notifications') as any)
+                .update({ is_read: true } as any)
                 .eq('recipient_id', user.id)
-                .eq('is_read', false)
+                .eq('is_read', false) as any)
 
         } catch (error) {
             console.error('Error marking all as read:', error)
@@ -118,9 +118,9 @@ export function useNotifications() {
                             .single()
 
                         const newNotification = {
-                            ...payload.new,
+                            ...(payload.new as any),
                             users: actor
-                        } as Notification
+                        } as unknown as Notification
 
                         setNotifications(prev => [newNotification, ...prev])
                         setUnreadCount(prev => prev + 1)

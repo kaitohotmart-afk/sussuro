@@ -71,14 +71,14 @@ export function EditProfileForm({ user, profile }: EditProfileFormProps) {
             }
 
             // Update profile
-            const { error: updateError } = await supabase
-                .from('users')
+            const { error: updateError } = await ((supabase
+                .from('users') as any)
                 .update({
                     username: data.username,
                     avatar_value: selectedAvatar,
                     bio: data.bio,
-                })
-                .eq('id', user.id)
+                } as any)
+                .eq('id', user.id) as any)
 
             if (updateError) throw updateError
 

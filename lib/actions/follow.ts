@@ -32,12 +32,12 @@ export async function toggleFollow(targetUserId: string) {
             return { following: false }
         } else {
             // Follow
-            const { error } = await supabase
+            const { error } = await (supabase
                 .from('follows')
                 .insert({
                     follower_id: user.id,
                     following_id: targetUserId
-                })
+                } as any) as any)
 
             if (error) throw error
             revalidatePath(`/perfil`)

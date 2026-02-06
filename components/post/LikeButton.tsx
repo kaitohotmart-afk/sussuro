@@ -41,12 +41,12 @@ export function LikeButton({ postId, initialLikes, initialIsLiked, userId }: Lik
             }
         } else {
             // Like
-            const { error } = await supabase
+            const { error } = await (supabase
                 .from('likes')
                 .insert({
                     user_id: userId,
                     post_id: postId,
-                })
+                } as any) as any)
 
             if (!error) {
                 setLikes(prev => prev + 1)
@@ -63,8 +63,8 @@ export function LikeButton({ postId, initialLikes, initialIsLiked, userId }: Lik
             onClick={handleLike}
             disabled={isLoading}
             className={`flex items-center gap-2 transition-colors ${isLiked
-                    ? 'text-accent'
-                    : 'text-text-secondary hover:text-accent'
+                ? 'text-accent'
+                : 'text-text-secondary hover:text-accent'
                 } disabled:opacity-50`}
         >
             <Heart

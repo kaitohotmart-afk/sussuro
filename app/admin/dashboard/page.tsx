@@ -25,8 +25,8 @@ export default function AdminDashboardPage() {
             const supabase = createClient()
 
             // Fetch aggregate stats
-            const { data: dashboardStats, error: statsError } = await supabase
-                .rpc('get_admin_dashboard_stats')
+            const { data: dashboardStats, error: statsError } = await (supabase
+                .rpc('get_admin_dashboard_stats') as any)
 
             if (statsError) console.error('Stats error:', statsError)
             else setStats(dashboardStats)

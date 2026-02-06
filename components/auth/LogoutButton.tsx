@@ -18,7 +18,7 @@ export function LogoutButton() {
     return (
         <Button
             variant="ghost"
-            size="default"
+            size="md"
             onClick={handleLogout}
             className="w-full text-error hover:bg-error/10 hover:text-error flex items-center justify-center gap-2"
         >

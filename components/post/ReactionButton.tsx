@@ -77,13 +77,13 @@ export function ReactionButton({
                     .delete()
                     .match({ user_id: userId, post_id: postId })
             } else {
-                await supabase
+                await (supabase
                     .from('likes')
                     .upsert({
                         user_id: userId,
                         post_id: postId,
                         reaction_type: type
-                    }, { onConflict: 'user_id, post_id' })
+                    } as any, { onConflict: 'user_id, post_id' } as any) as any)
             }
         } catch (error) {
             console.error('Error updating reaction:', error)

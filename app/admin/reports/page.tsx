@@ -31,24 +31,22 @@ export default function AdminReportsPage() {
 
     const handleAction = async (reportId: string, action: 'dismiss' | 'remove_content', postId?: string) => {
         // Update report status
-        await supabase
-            .from('reports')
+        await ((supabase.from('reports') as any)
             .update({
                 status: 'resolved',
                 action_taken: action,
                 reviewed_at: new Date().toISOString()
-            })
-            .eq('id', reportId)
+            } as any)
+            .eq('id', reportId))
 
         if (action === 'remove_content' && postId) {
-            await supabase
-                .from('posts')
+            await ((supabase.from('posts') as any)
                 .update({
                     is_removed: true,
                     removed_reason: 'Admin moderation via Dashboard',
                     removed_at: new Date().toISOString()
-                })
-                .eq('id', postId)
+                } as any)
+                .eq('id', postId))
         }
 
         // Optimistic update

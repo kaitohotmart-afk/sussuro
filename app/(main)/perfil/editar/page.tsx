@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { EditProfileForm } from '@/components/profile/EditProfileForm'
 import { Card } from '@/components/ui/Card'
-import { redirect } from 'next/navigation'
+import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 
 export default async function EditProfilePage() {
@@ -14,11 +14,15 @@ export default async function EditProfilePage() {
     }
 
     // Fetch current profile
-    const { data: profile } = await supabase
+    const { data: profile } = await (supabase
         .from('users')
         .select('*')
         .eq('id', user.id)
-        .single()
+        .single() as any)
+
+    if (!profile) {
+        notFound()
+    }
 
     return (
         <div className="min-h-screen pb-20">
