@@ -1,0 +1,18 @@
+{
+    "name": "Sussurro",
+    "short_name": "Sussurro",
+    "description": "Suas histórias, seu anonimato, sua comunidade",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#8b5cf6",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
