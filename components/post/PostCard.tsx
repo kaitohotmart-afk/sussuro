@@ -11,6 +11,7 @@ import { formatRelativeTime } from '@/lib/utils/format'
 import { MessageCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils/cn'
+import { PostOptions } from '@/components/post/PostOptions'
 import Link from 'next/link'
 
 interface PostCardProps {
@@ -52,8 +53,11 @@ export function PostCard({ post, userId }: PostCardProps) {
                             </p>
                         </div>
                     </Link>
-                    <span className="ml-auto text-[10px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-2.5 py-1 rounded-full text-text-secondary group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/20 transition-all">
-                        {post.category}
+                    <span className="ml-auto flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-2.5 py-1 rounded-full text-text-secondary group-hover:bg-accent/10 group-hover:text-accent group-hover:border-accent/20 transition-all">
+                            {post.category}
+                        </span>
+                        {userId === post.user_id && <PostOptions post={post} />}
                     </span>
                 </div>
 
