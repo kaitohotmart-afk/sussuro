@@ -57,26 +57,27 @@ export default function CreatePostPage() {
       .single()
 
     if (userData) {
-      if (userData.posts_this_hour >= 5) {
+      const userStats = userData as any
+      if (userStats.posts_this_hour >= 5) {
         setError('Limite de 5 posts por hora atingido. Aguarde um pouco.')
         setLoading(false)
         return
       }
-      if (userData.posts_today >= 20) {
+      if (userStats.posts_today >= 20) {
         setError('Limite de 20 posts por dia atingido. Volte amanhã!')
         setLoading(false)
         return
       }
     }
 
-    const { error: postError } = await supabase.from('posts').insert({
+    const { error: postError } = await (supabase.from('posts').insert({
       user_id: user.id,
       title: data.title,
       content: data.content,
       category: data.category,
       post_type: 'text',
       is_sensitive: data.is_sensitive,
-    })
+    } as any) as any)
 
     if (postError) {
       setError('Erro ao criar post')

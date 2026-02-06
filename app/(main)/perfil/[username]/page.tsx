@@ -25,7 +25,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         .from('users')
         .select('*')
         .eq('username', params.username)
-        .single()
+        .single() as any
 
     if (!profile) {
         notFound()
@@ -45,10 +45,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         `)
         .eq('user_id', profile.id)
         .eq('is_removed', false)
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: false }) as any
 
     // Enhance posts with isLiked/isSaved
-    const postsWithStatus = posts?.map(post => ({
+    const postsWithStatus = posts?.map((post: any) => ({
         ...post,
         isLiked: post.likes.some((l: any) => l.user_id === currentUser?.id),
         isSaved: post.saved_posts.some((s: any) => s.user_id === currentUser?.id),
@@ -123,7 +123,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
                 {postsWithStatus.length > 0 ? (
                     <div className="grid gap-4">
-                        {postsWithStatus.map((post) => (
+                        {postsWithStatus.map((post: any) => (
                             <PostCard
                                 key={post.id}
                                 post={post}

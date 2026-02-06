@@ -29,13 +29,14 @@ export default async function PostDetailPage({ params }: { params: { id: string 
     `)
         .eq('id', params.id)
         .eq('is_removed', false)
-        .single()
+        .single() as any
 
     if (error || !post) {
         notFound()
     }
 
-    const userLike = post.likes?.find((like: any) => like.user_id === user.id)
+    const postData = post as any
+    const userLike = postData.likes?.find((like: any) => like.user_id === user.id)
     const isLiked = !!userLike
     const userReaction = userLike?.reaction_type || null
 
@@ -57,47 +58,47 @@ export default async function PostDetailPage({ params }: { params: { id: string 
                     {/* Author */}
                     <div className="flex items-center gap-3 mb-3">
                         <Avatar
-                            type={post.users.avatar_type as 'icon'}
-                            value={post.users.avatar_value}
+                            type={postData.users.avatar_type as 'icon'}
+                            value={postData.users.avatar_value}
                             size="sm"
                         />
                         <div>
-                            <p className="font-medium">{post.users.username}</p>
+                            <p className="font-medium">{postData.users.username}</p>
                             <p className="text-xs text-text-secondary">
-                                {formatRelativeTime(post.created_at)}
+                                {formatRelativeTime(postData.created_at)}
                             </p>
                         </div>
                         <span className="ml-auto text-sm bg-surface-hover px-2 py-1 rounded">
-                            {post.category}
+                            {postData.category}
                         </span>
                     </div>
 
                     {/* Content */}
                     <div className="mb-4">
-                        {post.title && (
+                        {postData.title && (
                             <h2 className="text-xl font-bold text-text-primary mb-2">
-                                {post.title}
+                                {postData.title}
                             </h2>
                         )}
                         <p className="text-text-primary whitespace-pre-wrap">
-                            {post.content}
+                            {postData.content}
                         </p>
                     </div>
 
                     {/* Actions */}
                     <div className="flex items-center gap-6 text-text-secondary border-t border-border pt-3">
                         <ReactionButton
-                            postId={post.id}
-                            initialLikes={post.like_count}
+                            postId={postData.id}
+                            initialLikes={postData.like_count}
                             initialIsLiked={isLiked}
                             initialReactionType={userReaction}
                             userId={user.id}
                         />
                         <div className="flex items-center gap-2">
                             <MessageCircle size={20} />
-                            <span>{post.comment_count}</span>
+                            <span>{postData.comment_count}</span>
                         </div>
-                        <ShareButton postId={post.id} />
+                        <ShareButton postId={postData.id} />
                     </div>
                 </Card>
 
@@ -107,12 +108,12 @@ export default async function PostDetailPage({ params }: { params: { id: string 
 
                     {/* Comment Form */}
                     <Card>
-                        <CommentForm postId={post.id} userId={user.id} />
+                        <CommentForm postId={postData.id} userId={user.id} />
                     </Card>
 
                     {/* Comment List */}
                     <Card>
-                        <CommentList postId={post.id} />
+                        <CommentList postId={postData.id} />
                     </Card>
                 </div>
             </main>

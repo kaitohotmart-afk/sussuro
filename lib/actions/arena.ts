@@ -7,8 +7,8 @@ export async function getDailyBattle(category: string = 'historias') {
     const supabase = createClient()
 
     // Call RPC to ensure battle exists
-    const { data: battleId, error: createError } = await supabase
-        .rpc('get_or_create_daily_battle', { p_category: category })
+    const { data: battleId, error: createError } = await (supabase
+        .rpc('get_or_create_daily_battle', { p_category: category } as any) as any)
 
     if (createError || !battleId) {
         console.error('Error getting daily battle:', createError)
@@ -30,7 +30,7 @@ export async function getDailyBattle(category: string = 'historias') {
             )
         `)
         .eq('id', battleId)
-        .single()
+        .single() as any
 
     if (fetchError) {
         console.error('Error fetching battle details:', fetchError)
@@ -47,7 +47,7 @@ export async function getDailyBattle(category: string = 'historias') {
             .select('post_id')
             .eq('battle_id', battleId)
             .eq('user_id', user.id)
-            .single()
+            .single() as any
 
         if (vote) userVote = vote.post_id
     }
@@ -68,7 +68,7 @@ export async function voteInBattle(battleId: string, postId: string) {
                 battle_id: battleId,
                 user_id: user.id,
                 post_id: postId
-            })
+            } as any)
 
         if (error) throw error
 
