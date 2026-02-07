@@ -41,20 +41,40 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         .select(`
             *,
             users (username, avatar_type, avatar_value),
-            likes (user_id),
+            likes (user_id, reaction_type, users (username)),
             saved_posts (user_id)
         `)
         .eq('user_id', profile.id)
         .eq('is_removed', false)
         .order('created_at', { ascending: false }) as any
 
-    // Enhance posts with isLiked/isSaved
-    const postsWithStatus = posts?.map((post: any) => ({
-        ...post,
-        isLiked: post.likes.some((l: any) => l.user_id === currentUser?.id),
-        isSaved: post.saved_posts.some((s: any) => s.user_id === currentUser?.id),
-        userReaction: null // Simplified for now
-    })) || []
+    // Enhance posts with isLiked/isSaved/reactions
+    const postsWithStatus = posts?.map((post: any) => {
+        const userLike = post.likes?.find((l: any) => l.user_id === currentUser?.id)
+
+        // Calculate top reactions and latest reactor for fallback (same as explore.ts)
+        const reactions = post.likes || []
+        const reactionCounts: Record<string, number> = {}
+        reactions.forEach((l: any) => {
+            const type = l.reaction_type || 'like'
+            reactionCounts[type] = (reactionCounts[type] || 0) + 1
+        })
+        const topReactions = Object.entries(reactionCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3)
+            .map(([type]) => type)
+
+        const latestReactor = reactions.length > 0 ? reactions[reactions.length - 1].users?.username : null
+
+        return {
+            ...post,
+            isLiked: !!userLike,
+            isSaved: post.saved_posts?.some((s: any) => s.user_id === currentUser?.id),
+            userReaction: userLike?.reaction_type || null,
+            top_reactions: topReactions,
+            latest_reactor: latestReactor
+        }
+    }) || []
 
     // Check follow status
     let isFollowing = false

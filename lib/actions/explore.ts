@@ -56,7 +56,10 @@ export async function fetchExplorePosts(page: number = 1) {
                 avatar_value: post.author_avatar_value
             },
             isLiked: likesMap.has(post.id),
-            userReaction: likesMap.get(post.id) || null
+            userReaction: likesMap.get(post.id) || null,
+            // Fallback for top_reactions/latest_reactor if they were somehow missing but shouldn't be now
+            top_reactions: post.top_reactions || [],
+            latest_reactor: post.latest_reactor || null
         }))
 
         const nextCursor = posts.length === PAGE_SIZE ? page + 1 : null
@@ -78,7 +81,7 @@ export async function fetchExplorePosts(page: number = 1) {
             .select(`
                 *,
                 users (username, avatar_type, avatar_value),
-                likes (user_id, reaction_type)
+                likes (user_id, reaction_type, users (username))
             `)
             .eq('is_removed', false)
             // Simple sort by like_count as fallback
@@ -90,10 +93,27 @@ export async function fetchExplorePosts(page: number = 1) {
 
         const postsWithLikes = posts.map((post: any) => {
             const userLike = post.likes?.find((like: any) => like.user_id === user?.id)
+
+            // Calculate top reactions and latest reactor for fallback
+            const reactions = post.likes || []
+            const reactionCounts: Record<string, number> = {}
+            reactions.forEach((l: any) => {
+                const type = l.reaction_type || 'like'
+                reactionCounts[type] = (reactionCounts[type] || 0) + 1
+            })
+            const topReactions = Object.entries(reactionCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([type]) => type)
+
+            const latestReactor = reactions.length > 0 ? reactions[reactions.length - 1].users?.username : null
+
             return {
                 ...post,
                 isLiked: !!userLike,
-                userReaction: userLike?.reaction_type || null
+                userReaction: userLike?.reaction_type || null,
+                top_reactions: topReactions,
+                latest_reactor: latestReactor
             }
         })
 

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useState, useRef } from 'react'
 import { ThumbsUp } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils/cn'
 
 interface ReactionButtonProps {
     postId: string
@@ -11,22 +12,28 @@ interface ReactionButtonProps {
     initialIsLiked: boolean
     initialReactionType?: string | null
     userId: string
+    showCount?: boolean
+    showLabel?: boolean
+    onReaction?: (type: string | null) => void
 }
 
 const REACTIONS = [
-    { type: 'like', emoji: '👍', label: 'Curtir' },
-    { type: 'love', emoji: '❤️', label: 'Amei' },
-    { type: 'haha', emoji: '😂', label: 'Haha' },
-    { type: 'wow', emoji: '😮', label: 'Uau' },
-    { type: 'sad', emoji: '😢', label: 'Triste' },
-    { type: 'angry', emoji: '😡', label: 'Grr' },
+    { type: 'like', emoji: '👍', label: 'Gosto', color: 'text-[#1877F2]' },
+    { type: 'love', emoji: '❤️', label: 'Adoro', color: 'text-[#F33E58]' },
+    { type: 'haha', emoji: '😂', label: 'Haha', color: 'text-[#F7B125]' },
+    { type: 'wow', emoji: '😮', label: 'Uau', color: 'text-[#F7B125]' },
+    { type: 'sad', emoji: '😢', label: 'Triste', color: 'text-[#F7B125]' },
+    { type: 'angry', emoji: '😡', label: 'Grr', color: 'text-[#E9710F]' },
 ]
 
 export function ReactionButton({
     postId,
     initialLikes,
     initialReactionType = null,
-    userId
+    userId,
+    showCount = true,
+    showLabel = false,
+    onReaction
 }: ReactionButtonProps) {
     // Determine initial state based on props
     // If initialReactionType is present, use it.
@@ -69,6 +76,7 @@ export function ReactionButton({
         }
 
         setShowReactions(false)
+        if (onReaction) onReaction(newReaction)
 
         try {
             if (isRemove) {
@@ -101,8 +109,8 @@ export function ReactionButton({
         }
     }
 
-    const currentEmoji = userReaction
-        ? REACTIONS.find(r => r.type === userReaction)?.emoji
+    const currentReaction = userReaction
+        ? REACTIONS.find(r => r.type === userReaction)
         : null
 
     return (
@@ -138,17 +146,26 @@ export function ReactionButton({
 
             <button
                 onClick={handleMainClick}
-                className={`flex items-center gap-2 transition-colors ${userReaction ? 'text-blue-500' : 'text-text-secondary hover:text-text-primary'
-                    }`}
-            >
-                {currentEmoji ? (
-                    <span className="text-xl leading-none">{currentEmoji}</span>
-                ) : (
-                    <ThumbsUp size={20} />
+                className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-xl transition-all active:scale-95 hover:bg-white/5",
+                    currentReaction ? currentReaction.color : 'text-text-secondary'
                 )}
-                <span className={`font-medium ${userReaction ? 'text-blue-500' : ''}`}>
-                    {likes}
-                </span>
+            >
+                {currentReaction ? (
+                    <span className="text-xl leading-none">{currentReaction.emoji}</span>
+                ) : (
+                    <ThumbsUp size={18} />
+                )}
+                {showLabel && (
+                    <span className="text-sm font-bold">
+                        {currentReaction ? currentReaction.label : 'Gosto'}
+                    </span>
+                )}
+                {showCount && (
+                    <span className="text-sm font-bold">
+                        {likes}
+                    </span>
+                )}
             </button>
         </div>
     )

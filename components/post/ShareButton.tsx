@@ -5,9 +5,11 @@ import { useState } from 'react'
 
 interface ShareButtonProps {
     postId: string
+    className?: string
+    showLabel?: boolean
 }
 
-export function ShareButton({ postId }: ShareButtonProps) {
+export function ShareButton({ postId, className, showLabel = false }: ShareButtonProps) {
     const [copied, setCopied] = useState(false)
 
     const handleShare = async () => {
@@ -41,16 +43,19 @@ export function ShareButton({ postId }: ShareButtonProps) {
     return (
         <button
             onClick={handleShare}
-            className="flex items-center gap-2 text-text-secondary hover:text-accent transition-all p-2 rounded-lg hover:bg-white/5 group/share"
+            className={className || "flex items-center gap-2 text-text-secondary hover:text-accent transition-all p-2 rounded-lg hover:bg-white/5 group/share"}
             title="Compartilhar"
         >
             {copied ? (
                 <>
                     <Check size={18} className="text-success" />
-                    <span className="text-[10px] font-bold uppercase tracking-tight text-success">Copiado!</span>
+                    <span className="text-sm font-bold text-success">Copiado!</span>
                 </>
             ) : (
-                <Share2 size={18} className="group-hover/share:scale-110 transition-transform" />
+                <>
+                    <Share2 size={18} className="group-hover/share:scale-110 transition-transform" />
+                    {showLabel && <span className="text-sm font-bold">Partilhar</span>}
+                </>
             )}
         </button>
     )
